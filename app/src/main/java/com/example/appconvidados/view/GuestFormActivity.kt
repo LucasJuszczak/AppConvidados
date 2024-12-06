@@ -2,6 +2,7 @@ package com.example.appconvidados.view
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -41,6 +42,7 @@ class GuestFormActivity : AppCompatActivity(), View.OnClickListener {
 
             val guest = GuestModel(0, name, presence)
             viewModel.insert(guest)
+            Toast.makeText(this, "Cadastrado!", Toast.LENGTH_SHORT).show()
         }
     }
 }
