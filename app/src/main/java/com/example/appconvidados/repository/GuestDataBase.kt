@@ -3,7 +3,6 @@ package com.example.appconvidados.repository
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.provider.ContactsContract.Data
 import com.example.appconvidados.constants.DataBaseConstants
 
 class GuestDataBase(context: Context) : SQLiteOpenHelper(context, NAME, null, VERSION){
@@ -22,5 +21,21 @@ class GuestDataBase(context: Context) : SQLiteOpenHelper(context, NAME, null, VE
                 DataBaseConstants.GUEST.COLUMNS.PRESENCE + "integer);")
     }
 
-    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) { }
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        when (oldVersion) {
+            1 -> {
+
+            }
+            2 -> {
+
+            }
+            3 -> {
+
+            }
+            else -> {
+
+            }
+        }
+
+    }
 }
