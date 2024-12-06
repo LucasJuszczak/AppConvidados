@@ -9,6 +9,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.appconvidados.R
 import com.example.appconvidados.databinding.ActivityGuestFormBinding
+import com.example.appconvidados.model.GuestModel
 import com.example.appconvidados.viewmodel.GuestFormViewModel
 
 class GuestFormActivity : AppCompatActivity(), View.OnClickListener {
@@ -27,14 +28,19 @@ class GuestFormActivity : AppCompatActivity(), View.OnClickListener {
             insets
         }
 
-        viewModel = ViewModelProvider(this).get(GuestFormViewModel::class.java)
+        viewModel = ViewModelProvider(this)[GuestFormViewModel::class.java]
 
         binding.buttonEnviar.setOnClickListener(this)
+        binding.radioPresent.isChecked = true
     }
 
     override fun onClick(view: View) {
         if(view.id == R.id.button_enviar){
+            val name = binding.editTextName.text.toString()
+            val presence = binding.radioPresent.isChecked
 
+            val guest = GuestModel(0, name, presence)
+            viewModel.insert(guest)
         }
     }
 }
