@@ -2,7 +2,6 @@ package com.example.appconvidados.repository
 
 import android.content.ContentValues
 import android.content.Context
-import android.provider.ContactsContract.Data
 import com.example.appconvidados.constants.DataBaseConstants
 import com.example.appconvidados.model.GuestModel
 
