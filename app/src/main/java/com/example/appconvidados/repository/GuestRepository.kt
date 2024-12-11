@@ -1,5 +1,6 @@
 package com.example.appconvidados.repository
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.provider.ContactsContract.Data
@@ -75,4 +76,75 @@ class GuestRepository private constructor(context: Context) {
         }
     }
 
+    @SuppressLint("Recycle", "Range")
+    fun getAll(): List<GuestModel>{
+
+        val list = mutableListOf<GuestModel>()
+
+        try {
+            val db = guestDataBase.readableDatabase
+
+            val projection = arrayOf(
+                DataBaseConstants.GUEST.COLUMNS.ID,
+                DataBaseConstants.GUEST.COLUMNS.NAME,
+                DataBaseConstants.GUEST.COLUMNS.PRESENCE
+            )
+
+            val cursor = db.query(DataBaseConstants.GUEST.TABLE_NAME, projection, null, null, null, null, null)
+
+            if (cursor != null && cursor.count > 0) {
+                while (cursor.moveToNext()) {
+                    val id = cursor.getInt(cursor.getColumnIndex(DataBaseConstants.GUEST.COLUMNS.ID))
+                    val name = cursor.getString(cursor.getColumnIndex(DataBaseConstants.GUEST.COLUMNS.NAME))
+                    val presence = cursor.getInt(cursor.getColumnIndex(DataBaseConstants.GUEST.COLUMNS.PRESENCE))
+
+                    //Construindo o modelo
+                    val guest = GuestModel(id, name, presence == 1)
+                    list.add(guest)
+                }
+            }
+            cursor.close()
+    } catch (e: Exception) {
+        return list
+    }
+        return list
+    }
+
+    @SuppressLint("Recycle", "Range")
+    fun getPresence(): List<GuestModel>{
+
+        val list = mutableListOf<GuestModel>()
+
+        try {
+            val db = guestDataBase.readableDatabase
+
+            val projection = arrayOf(
+                DataBaseConstants.GUEST.COLUMNS.ID,
+                DataBaseConstants.GUEST.COLUMNS.NAME,
+                DataBaseConstants.GUEST.COLUMNS.PRESENCE
+            )
+
+//            val selection = DataBaseConstants.GUEST.COLUMNS.PRESENCE + " = ?"
+//            val args = arrayOf("1")
+//            val cursor = db.query(DataBaseConstants.GUEST.TABLE_NAME, projection, selection, args, null, null, null)
+
+            val cursor = db.rawQuery("SELECT id, name, presence FROM Guest WHERE presence == 1", null)
+
+            if (cursor != null && cursor.count > 0) {
+                while (cursor.moveToNext()) {
+                    val id = cursor.getInt(cursor.getColumnIndex(DataBaseConstants.GUEST.COLUMNS.ID))
+                    val name = cursor.getString(cursor.getColumnIndex(DataBaseConstants.GUEST.COLUMNS.NAME))
+                    val presence = cursor.getInt(cursor.getColumnIndex(DataBaseConstants.GUEST.COLUMNS.PRESENCE))
+
+                    //Construindo o modelo
+                    val guest = GuestModel(id, name, presence == 1)
+                    list.add(guest)
+                }
+            }
+            cursor.close()
+        } catch (e: Exception) {
+            return list
+        }
+        return list
+    }
 }
