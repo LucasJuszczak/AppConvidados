@@ -7,8 +7,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.appconvidados.R
+import com.example.appconvidados.constants.DataBaseConstants
 import com.example.appconvidados.databinding.ActivityGuestFormBinding
 import com.example.appconvidados.model.GuestModel
 import com.example.appconvidados.viewmodel.GuestFormViewModel
@@ -17,6 +19,8 @@ class GuestFormActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var binding : ActivityGuestFormBinding
     private lateinit var viewModel : GuestFormViewModel
+
+    private var guestId = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +37,10 @@ class GuestFormActivity : AppCompatActivity(), View.OnClickListener {
 
         binding.buttonEnviar.setOnClickListener(this)
         binding.radioPresent.isChecked = true
+
+        observe()
+        loadData()
+
     }
 
     override fun onClick(view: View) {
@@ -40,10 +48,28 @@ class GuestFormActivity : AppCompatActivity(), View.OnClickListener {
             val name = binding.editTextName.text.toString()
             val presence = binding.radioPresent.isChecked
 
-            val guest = GuestModel(0, name, presence)
-            viewModel.insert(guest)
-            Toast.makeText(this, "Cadastrado!", Toast.LENGTH_SHORT).show()
+            val model = GuestModel(guestId, name, presence)
+            viewModel.save(model)
             finish()
+        }
+    }
+
+    private fun observe(){
+        viewModel.guest.observe(this, Observer {
+            binding.editTextName.setText(it.name)
+            if(it.presence){
+                binding.radioPresent.isChecked = true
+            }else{
+                binding.radioAbsent.isChecked = true
+            }
+        })
+    }
+
+    private fun loadData() {
+        val bundle = intent.extras
+        if(bundle != null){
+            guestId = bundle.getInt(DataBaseConstants.GUEST.ID)
+            viewModel.get(guestId)
         }
     }
 }
