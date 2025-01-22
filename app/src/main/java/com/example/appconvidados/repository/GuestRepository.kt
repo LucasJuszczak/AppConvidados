@@ -110,7 +110,7 @@ class GuestRepository private constructor(context: Context) {
     }
 
     @SuppressLint("Recycle", "Range")
-    fun getAll(): List<GuestModel>{
+    fun getAll(): List<GuestModel> {
 
         val list = mutableListOf<GuestModel>()
 
@@ -123,28 +123,36 @@ class GuestRepository private constructor(context: Context) {
                 DataBaseConstants.GUEST.COLUMNS.PRESENCE
             )
 
-            val cursor = db.query(DataBaseConstants.GUEST.TABLE_NAME, projection, null, null, null, null, null)
+            val selection = DataBaseConstants.GUEST.COLUMNS.PRESENCE +" = ?"
+            val args = arrayOf("1")
+
+            val cursor = db.query(
+                DataBaseConstants.GUEST.TABLE_NAME, projection, selection, args, null, null, null
+            )
 
             if (cursor != null && cursor.count > 0) {
                 while (cursor.moveToNext()) {
-                    val id = cursor.getInt(cursor.getColumnIndex(DataBaseConstants.GUEST.COLUMNS.ID))
-                    val name = cursor.getString(cursor.getColumnIndex(DataBaseConstants.GUEST.COLUMNS.NAME))
-                    val presence = cursor.getInt(cursor.getColumnIndex(DataBaseConstants.GUEST.COLUMNS.PRESENCE))
+                    val id =
+                        cursor.getInt(cursor.getColumnIndex(DataBaseConstants.GUEST.COLUMNS.ID))
+                    val name =
+                        cursor.getString(cursor.getColumnIndex(DataBaseConstants.GUEST.COLUMNS.NAME))
+                    val presence =
+                        cursor.getInt(cursor.getColumnIndex(DataBaseConstants.GUEST.COLUMNS.PRESENCE))
 
-                    //Construindo o modelo
+                    //construindo o modelo
                     val guest = GuestModel(id, name, presence == 1)
                     list.add(guest)
                 }
             }
             cursor.close()
-    } catch (e: Exception) {
-        return list
-    }
+        }catch (e: Exception){
+            return list
+        }
         return list
     }
 
     @SuppressLint("Recycle", "Range")
-    fun getPresence(): List<GuestModel>{
+    fun getPresence(): List<GuestModel> {
 
         val list = mutableListOf<GuestModel>()
 
@@ -156,12 +164,16 @@ class GuestRepository private constructor(context: Context) {
                 DataBaseConstants.GUEST.COLUMNS.NAME,
                 DataBaseConstants.GUEST.COLUMNS.PRESENCE
             )
-
-//            val selection = DataBaseConstants.GUEST.COLUMNS.PRESENCE + " = ?"
-//            val args = arrayOf("1")
-//            val cursor = db.query(DataBaseConstants.GUEST.TABLE_NAME, projection, selection, args, null, null, null)
-
-            val cursor = db.rawQuery("SELECT id, name, presence FROM Guest WHERE presence == 1", null)
+            /*
+            val selection = DataBaseConstants.GUEST.COLUMNS.PRESENCE +" = ?"
+            val args = arrayOf("1")
+            val cursor = db.query(
+                DataBaseConstants.GUEST.TABLE_NAME, projection, selection, args, null, null, null
+            )
+            */
+            //Recuperando com SQL
+            val cursor =
+                db.rawQuery("SELECT id, name, presence FROM guest WHERE presence = 1", null)
 
             if (cursor != null && cursor.count > 0) {
                 while (cursor.moveToNext()) {
@@ -175,7 +187,7 @@ class GuestRepository private constructor(context: Context) {
                 }
             }
             cursor.close()
-        } catch (e: Exception) {
+        }catch (e: Exception){
             return list
         }
         return list
