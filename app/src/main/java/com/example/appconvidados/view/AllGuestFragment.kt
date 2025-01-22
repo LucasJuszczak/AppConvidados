@@ -5,24 +5,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.TextView
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.appconvidados.constants.DataBaseConstants
 import com.example.appconvidados.databinding.FragmentAllGuestsBinding
 import com.example.appconvidados.view.adapter.GuestsAdapter
 import com.example.appconvidados.view.listener.OnGuestListener
-import com.example.appconvidados.viewmodel.AllGuestViewModel
+import com.example.appconvidados.viewmodel.GuestsViewModel
 
 class AllGuestFragment : Fragment() {
 
     private var _binding: FragmentAllGuestsBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: AllGuestViewModel
+    private lateinit var viewModel: GuestsViewModel
     private val adapter = GuestsAdapter()
 
     override fun onCreateView(
@@ -30,12 +26,12 @@ class AllGuestFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewModel = ViewModelProvider(this).get(AllGuestViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(GuestsViewModel::class.java)
         _binding = FragmentAllGuestsBinding.inflate(inflater, container, false)
 
-        binding.recyclerAllGuests.layoutManager = LinearLayoutManager(context)
+        binding.recyclerGuests.layoutManager = LinearLayoutManager(context)
 
-        binding.recyclerAllGuests.adapter = adapter
+        binding.recyclerGuests.adapter = adapter
 
         val listener = object : OnGuestListener {
             override fun onClick(id: Int) {

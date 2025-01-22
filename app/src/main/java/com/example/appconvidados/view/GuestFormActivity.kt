@@ -63,6 +63,13 @@ class GuestFormActivity : AppCompatActivity(), View.OnClickListener {
                 binding.radioAbsent.isChecked = true
             }
         })
+
+        viewModel.saveGuest.observe(this, Observer {
+            if(it.success){
+                Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
+                finish()
+            }
+        })
     }
 
     private fun loadData() {
