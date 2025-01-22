@@ -41,7 +41,7 @@ class AbsentFragment : Fragment() {
 
             override fun onDelete(id: Int) {
                 viewModel.delete(id)
-                viewModel.getAll()
+                viewModel.getAbsent()
             }
         }
 
