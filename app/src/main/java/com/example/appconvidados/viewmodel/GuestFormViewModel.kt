@@ -18,10 +18,6 @@ class GuestFormViewModel(application: Application) : AndroidViewModel(applicatio
     private val _saveGuest = MutableLiveData<SuccessFailure>()
     val saveGuest: LiveData<SuccessFailure> = _saveGuest
 
-    fun insert(guest: GuestModel) {
-        repository.insert(guest)
-    }
-
     fun get(id: Int){
         guestModel.value = repository.get(id)
     }
