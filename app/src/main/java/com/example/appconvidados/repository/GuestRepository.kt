@@ -123,11 +123,8 @@ class GuestRepository private constructor(context: Context) {
                 DataBaseConstants.GUEST.COLUMNS.PRESENCE
             )
 
-            val selection = DataBaseConstants.GUEST.COLUMNS.PRESENCE +" = ?"
-            val args = arrayOf("1")
-
             val cursor = db.query(
-                DataBaseConstants.GUEST.TABLE_NAME, projection, selection, args, null, null, null
+                DataBaseConstants.GUEST.TABLE_NAME, projection, null, null, null, null, null
             )
 
             if (cursor != null && cursor.count > 0) {
